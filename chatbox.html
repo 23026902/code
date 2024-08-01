@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbox - FINVICE</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f9f9f9;
+    }
+
+    .navbar { /* Navbar colour */
+        background-color: rgb(255, 212, 241); 
+    }
+
+    .navbar-brand { /* Connect Pay Navbar colour */
+        color: black;
+        font-size: 30px; /* Increased font size */
+        font-weight: bold;
+        font-family: 'Times New Roman', Times, serif;
+    }
+
+    .navbar-brand:hover { /* Colour when hovered */
+        color: white; 
+    }
+
+    .nav-link { /* Navbar link colour */
+        color: black;
+        font-size: 18px; /* Consistent font size */
+    }
+
+    .nav-link:hover { /* Colour when hovered */
+        color: white; 
+    }
+
+    .nav-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+        background-color: rgb(255, 212, 241);
+    }
+
+    .logo {
+        color: black;
+        font-size: 24px;
+    }
+
+    .nav-links {
+        display: flex;
+        justify-content: flex-start;
+        flex-grow: 1;
+    }
+
+    .nav-links a {
+        color: black;
+        font-size: 18px;
+        margin: 0 10px;
+    }
+
+    .nav-links a:hover {
+        color: white;
+    }
+
+    .chat-box {
+        width: 100%; /* Full width */
+        height: calc(100vh - 40px); /* Full height minus navbar height */
+        border: 1px solid #ddd;
+        padding: 10px;
+        margin: 0;
+        background-color: #ffffff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 0;
+        position: fixed;
+        top: 56px; /* Below the navbar */
+        left: 0;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .chat-header {
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: black;
+    }
+
+    .chat-messages {
+        flex-grow: 1;
+        overflow-y: auto;
+        border: 1px solid #ddd;
+        padding: 5px;
+        margin-bottom: 10px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+    }
+
+    .chat-input {
+        flex-shrink: 0;
+        width: calc(100% - 80px); /* Adjusted for padding and button */
+        padding: 5px;
+        margin-right: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    .chat-input:focus {
+        outline: none;
+        border-color: rgb(255, 235, 253);
+    }
+
+    .chat-options {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 10px;
+    }
+
+    .chat-options button {
+        padding: 5px 10px;
+        border: none;
+        background-color: rgb(255, 235, 253);
+        color: black;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .chat-options button:hover {
+        background-color: #d0e0e8; /* Lighter shade on hover */
+    }
+
+    button {
+        padding: 5px 10px;
+        border: none;
+        background-color: rgb(255, 235, 253);
+        color: black;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #d0e0e8; /* Lighter shade on hover */
+    }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-sm custom-navbar">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/index.html">
+            FINVICE
+        </a>
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/tracking.html">Tracking</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/contact.html">Contact Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="logout.html">Log Out</a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="chat-box">
+    <div class="chat-header">AI Chatbot</div>
+    <div class="chat-messages" id="chatMessages">
+        <!-- Messages will be displayed here -->
+    </div>
+    <input type="text" id="chatInput" class="chat-input" placeholder="Type your message...">
+    <button onclick="sendMessage()">Send</button>
+</div>
+
+<script>
+function sendMessage() {
+    const input = document.getElementById('chatInput');
+    const messages = document.getElementById('chatMessages');
+    
+    // Get user input and clear the input field
+    const userMessage = input.value.trim();
+    input.value = '';
+
+    if (userMessage) {
+        // Display user message
+        const userMessageElement = document.createElement('div');
+        userMessageElement.textContent = `You: ${userMessage}`;
+        messages.appendChild(userMessageElement);
+
+        // Display AI response if it's the first message
+        if (messages.children.length === 1) {
+            const aiMessageElement = document.createElement('div');
+            aiMessageElement.textContent = 'AI: How can I help you today?';
+            messages.appendChild(aiMessageElement);
+
+            // Display options for the second message
+            const optionsMessageElement = document.createElement('div');
+            optionsMessageElement.innerHTML = `
+                AI: Please choose an option below:
+                <div class="chat-options">
+                    <button onclick="selectOption('financial advice')">Financial Advice</button>
+                    <button onclick="selectOption('others')">Others</button>
+                </div>`;
+            messages.appendChild(optionsMessageElement);
+        }
+        
+        // Scroll to the bottom of the chatbox
+        messages.scrollTop = messages.scrollHeight;
+    }
+}
+
+function selectOption(option) {
+    const messages = document.getElementById('chatMessages');
+    const userMessageElement = document.createElement('div');
+    userMessageElement.textContent = `You: ${option}`;
+    messages.appendChild(userMessageElement);
+
+    const aiMessageElement = document.createElement('div');
+    aiMessageElement.textContent = `AI: You selected ${option}. How can I assist you further with this?`;
+    messages.appendChild(aiMessageElement);
+    
+    // Scroll to the bottom of the chatbox
+    messages.scrollTop = messages.scrollHeight;
+}
+
+// Event listener to send message when "Enter" key is pressed
+document.getElementById('chatInput').addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+        sendMessage();
+    }
+});
+</script>
+
+</body>
+</html>
